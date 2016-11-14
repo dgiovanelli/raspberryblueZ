@@ -106,6 +106,8 @@ int main()
 	le_advertising_info * info;
 	int len;
 
+	setvbuf(stdout, NULL, _IONBF, 0);
+
 	while ( 1 ) {
 		len = read(device, buf, sizeof(buf));
 		if ( len >= HCI_EVENT_HDR_SIZE ) {
