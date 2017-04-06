@@ -175,9 +175,10 @@ int main()
 					ba2str(&(info->bdaddr), addr);
 					char name[30];
 					memset(name, 0, sizeof(name));
-					eir_parse_name(info->data, info->length,
-							name, sizeof(name) - 1);
-					printf("%s - %s - RSSI %d\n", addr, name,(signed char)info->data[info->length]);
+					eir_parse_name(info->data, info->length, name, sizeof(name) - 1);
+					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC")){
+						printf("%s - %s - RSSI %d\n", addr, name,(signed char)info->data[info->length]);
+					}
 					offset = info->data + info->length + 2;
 				}
 			}
