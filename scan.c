@@ -263,7 +263,7 @@ int main()
 						strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 						
 						printf("%d %s %s ADV %d %s\n", timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]);
-						fprintf(fp, "%s %d %s %s ADV %d %s\n", human_timestamp, timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]));
+						fprintf(fp, "%s %d %s %s ADV %d %s\n", human_timestamp, timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]);
 					}
 					offset = info->data + info->length + 2;
 				}
