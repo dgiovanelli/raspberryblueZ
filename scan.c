@@ -212,8 +212,11 @@ int main()
 					char name[30];
 					memset(name, 0, sizeof(name));
 					eir_parse_name(info->data, info->length, name, sizeof(name) - 1);
+					char manuf_data[30];
+					memset(manuf_data, 0, sizeof(manuf_data));
+					eir_parse_manuf_data(info->data, info->length, manuf_data, sizeof(manuf_data) - 1);
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
-						printf("%s - %s - RSSI %d\n", addr, name,(signed char)info->data[info->length]);
+						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],manuf_data);
 					}
 					offset = info->data + info->length + 2;
 				}
