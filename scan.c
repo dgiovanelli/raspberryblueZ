@@ -219,11 +219,16 @@ int main()
 	char filename[80];
 	time( &rawtime );
 	time_info = localtime( &rawtime );
-	strftime(filename,80,"log_%j_%H.%M.%S", time_info);
-	
+	strftime(filename,80,"log_%j_%H.%M.%S.txt", time_info);
 	
 	FILE * fp;
 	fp = fopen( filename, "w+" );
+	
+	char human_timestamp[80];
+	memset(human_timestamp, 0, sizeof(human_timestamp));
+	strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
+	fprintf(fp, "%s %d NO_ADDRESS LOCAL_DEVICE TAG Start_Monitoring 0.0.1\n", human_timestamp, timestamp_ms );
+
 	
 	uint8_t buf[HCI_MAX_EVENT_SIZE];
 	evt_le_meta_event * meta_event;
@@ -258,7 +263,6 @@ int main()
 						uint32_t timestamp = (unsigned)time(NULL);
 						uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
 						
-						char human_timestamp[80];
 						memset(human_timestamp, 0, sizeof(human_timestamp));
 						strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 						
