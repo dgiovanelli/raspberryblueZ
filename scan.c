@@ -103,7 +103,11 @@ static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
 			if (manuf_data_len > buf_len)
 				goto failed;
 
-			memcpy(buf, &eir[2], manuf_data_len);
+				buf[len] = '\0';
+
+				for (i = 0; i < len | i < buf_len; i++)
+					sprintf(buf + (i * 2), "%2.2X", &eir[2+i]);
+				//memcpy(buf, &eir[2], manuf_data_len);
 			return;
 		}
 
@@ -115,7 +119,7 @@ failed:
 	snprintf(buf, buf_len, "(unknown)");
 }
 
-static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
+/*static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
 	uint8_t len = 2; //skip manufacturer id
 	while( manuf_data[len] != 0){
 		len++;
@@ -129,7 +133,7 @@ static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
 		sprintf(manuf_data_str + (i * 2), "%2.2X", manuf_data[i]);
 	
 	return;
-}
+}*/
 
 int main()
 {
@@ -228,11 +232,11 @@ int main()
 					char name[30];
 					memset(name, 0, sizeof(name));
 					eir_parse_name(info->data, info->length, name, sizeof(name) - 1);
-					char manuf_data[30];
-					memset(manuf_data, 0, sizeof(manuf_data));
-					eir_parse_manuf_data(info->data, info->length, manuf_data, sizeof(manuf_data) - 1);
 					char manuf_data_str[60];
-					manuf_data_to_str(manuf_data,manuf_data_str);
+					memset(manuf_data_str, 0, sizeof(manuf_data_str));
+					eir_parse_manuf_data(info->data, info->length, manuf_data_str, sizeof(manuf_data_str) - 1);
+					/*char manuf_data_str[60];
+					manuf_data_to_str(manuf_data,manuf_data_str);*/
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
 						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data_str[0]);
 					}
