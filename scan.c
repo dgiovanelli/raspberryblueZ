@@ -123,10 +123,10 @@ static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
 	
 	uint8_t i;
 
-	manuf_data_str[0] = '\0';
+	manuf_data_str[len] = '\0';
 
 	for (i = 0; i < len; i++)
-		sprintf(manuf_data_str + (i * 2), "%2.2x", data[i]);
+		sprintf(manuf_data_str + (i * 2), "%2.2x", manuf_data[i]);
 	
 	return;
 }
