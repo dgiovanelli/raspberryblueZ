@@ -115,6 +115,22 @@ failed:
 	snprintf(buf, buf_len, "(unknown)");
 }
 
+static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
+	len = 2; //skip manufacturer id
+	while( manuf_data[len] != 0){
+		len++;
+	}
+	
+	uint8_t i;
+
+	manuf_data_str[0] = '\0';
+
+	for (i = 0; i < len; i++)
+		sprintf(manuf_data_str + (i * 2), "%2.2x", data[i]);
+	
+	return;
+}
+
 int main()
 {
 	int ret, status;
@@ -215,6 +231,8 @@ int main()
 					char manuf_data[30];
 					memset(manuf_data, 0, sizeof(manuf_data));
 					eir_parse_manuf_data(info->data, info->length, manuf_data, sizeof(manuf_data) - 1);
+					char manuf_data_str[60];
+					manuf_data_to_str(manuf_data,manuf_data_str);
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
 						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data[2]);
 					}
