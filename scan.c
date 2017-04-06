@@ -234,7 +234,7 @@ int main()
 					char manuf_data_str[60];
 					manuf_data_to_str(manuf_data,manuf_data_str);
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
-						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data[2]);
+						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data_str[2]);
 					}
 					offset = info->data + info->length + 2;
 				}
