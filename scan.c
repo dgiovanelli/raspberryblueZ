@@ -103,7 +103,7 @@ static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
 			if (manuf_data_len > buf_len)
 				return;
 
-				buf[len] = '\0';
+				buf[0] = '\0';
 				uint8_t i;
 				for (i = 0; i < manuf_data_len | i < buf_len; i++)
 					sprintf(buf + (i * 2), "%2.2X", &eir[2+i]);
