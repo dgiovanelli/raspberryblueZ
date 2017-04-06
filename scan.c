@@ -225,6 +225,8 @@ int main()
 	fp = fopen( filename, "w+" );
 	
 	char human_timestamp[80];
+	uint32_t timestamp = (unsigned)time(NULL);
+	uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
 	memset(human_timestamp, 0, sizeof(human_timestamp));
 	strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 	fprintf(fp, "%s %d NO_ADDRESS LOCAL_DEVICE TAG Start_Monitoring 0.0.1\n", human_timestamp, timestamp_ms );
@@ -259,10 +261,7 @@ int main()
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
 						time( &rawtime );
 						time_info = localtime( &rawtime );
-						
-						uint32_t timestamp = (unsigned)time(NULL);
-						uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
-						
+											
 						memset(human_timestamp, 0, sizeof(human_timestamp));
 						strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 						
