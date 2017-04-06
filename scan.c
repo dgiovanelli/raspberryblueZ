@@ -25,6 +25,42 @@ struct hci_request ble_hci_request(uint16_t ocf, int clen, void * status, void *
 	return rq;
 }
 
+static void eir_parse_name(uint8_t *eir, size_t eir_len,
+						char *buf, size_t buf_len)
+{
+	size_t offset;
+
+	offset = 0;
+	while (offset < eir_len) {
+		uint8_t field_len = eir[0];
+		size_t name_len;
+
+		/* Check for the end of EIR */
+		if (field_len == 0)
+			break;
+
+		if (offset + field_len > eir_len)
+			goto failed;
+
+		switch (eir[1]) {
+		case EIR_NAME_SHORT:
+		case EIR_NAME_COMPLETE:
+			name_len = field_len - 1;
+			if (name_len > buf_len)
+				goto failed;
+
+			memcpy(buf, &eir[2], name_len);
+			return;
+		}
+
+		offset += field_len + 1;
+		eir += field_len + 1;
+	}
+
+failed:
+	snprintf(buf, buf_len, "(unknown)");
+}
+
 int main()
 {
 	int ret, status;
@@ -119,7 +155,11 @@ int main()
 					info = (le_advertising_info *)offset;
 					char addr[18];
 					ba2str(&(info->bdaddr), addr);
-					printf("%s - RSSI %d\n", addr, (signed char)info->data[info->length]);
+					char name[30];
+					memset(name, 0, sizeof(name));
+					eir_parse_name(info->data, info->length,
+							name, sizeof(name) - 1);
+					printf("%s - %s - RSSI %d\n", addr, name,(signed char)info->data[info->length]);
 					offset = info->data + info->length + 2;
 				}
 			}
