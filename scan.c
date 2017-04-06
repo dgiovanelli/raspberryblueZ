@@ -95,17 +95,17 @@ static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
 			break;
 
 		if (offset + field_len > eir_len)
-			return;
+			goto failed;
 
 		switch (eir[1]) {
 		case EIR_MANUFACTURER_SPECIFIC:
 			manuf_data_len = field_len - 1;
 			if (manuf_data_len > buf_len)
-				return;
+				goto failed;
 
 			buf[0] = '\0';
 			uint8_t i;
-			for (i = 0; i < manuf_data_len || i < buf_len; i++){
+			for (i = 0; i < manuf_data_len && i < buf_len; i++){
 				sprintf(buf + (i * 2), "%2.2X", eir[2+i]);
 			}
 			//memcpy(buf, &eir[2], manuf_data_len);
@@ -115,6 +115,8 @@ static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
 		offset += field_len + 1;
 		eir += field_len + 1;
 	}
+failed:
+	snprintf(buf, buf_len, "(unknown)");
 }
 
 /*static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
