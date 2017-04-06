@@ -95,7 +95,7 @@ static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
 			break;
 
 		if (offset + field_len > eir_len)
-			goto failed;
+			return;
 
 		switch (eir[1]) {
 		case EIR_MANUFACTURER_SPECIFIC:
