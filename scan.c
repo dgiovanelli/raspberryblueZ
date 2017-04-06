@@ -29,6 +29,7 @@
 #define EIR_NAME_COMPLETE           0x09  /* complete local name */
 #define EIR_TX_POWER                0x0A  /* transmit power level */
 #define EIR_DEVICE_ID               0x10  /* device ID */
+#define EIR_MANUFACTURER_SPECIFIC   0xFF  /* Manufacturer specific data */
 
 struct hci_request ble_hci_request(uint16_t ocf, int clen, void * status, void * cparam)
 {
@@ -68,6 +69,41 @@ static void eir_parse_name(uint8_t *eir, size_t eir_len,
 				goto failed;
 
 			memcpy(buf, &eir[2], name_len);
+			return;
+		}
+
+		offset += field_len + 1;
+		eir += field_len + 1;
+	}
+
+failed:
+	snprintf(buf, buf_len, "(unknown)");
+}
+
+static void eir_parse_manuf_data(uint8_t *eir, size_t eir_len,
+						char *buf, size_t buf_len)
+{
+	size_t offset;
+
+	offset = 0;
+	while (offset < eir_len) {
+		uint8_t field_len = eir[0];
+		size_t manuf_data_len;
+
+		/* Check for the end of EIR */
+		if (field_len == 0)
+			break;
+
+		if (offset + field_len > eir_len)
+			goto failed;
+
+		switch (eir[1]) {
+		case EIR_MANUFACTURER_SPECIFIC:
+			manuf_data_len = field_len - 1;
+			if (manuf_data_len > buf_len)
+				goto failed;
+
+			memcpy(buf, &eir[2], manuf_data_len);
 			return;
 		}
 
