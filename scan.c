@@ -126,7 +126,7 @@ static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
 	manuf_data_str[len] = '\0';
 
 	for (i = 0; i < len; i++)
-		sprintf(manuf_data_str + (i * 2), "%2.2x", manuf_data[i]);
+		sprintf(manuf_data_str + (i * 2), "%2.2X", manuf_data[i]);
 	
 	return;
 }
@@ -234,7 +234,7 @@ int main()
 					char manuf_data_str[60];
 					manuf_data_to_str(manuf_data,manuf_data_str);
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
-						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data_str[2]);
+						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data_str[0]);
 					}
 					offset = info->data + info->length + 2;
 				}
