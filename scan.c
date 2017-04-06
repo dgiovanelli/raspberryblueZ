@@ -116,7 +116,7 @@ failed:
 }
 
 static void manuf_data_to_str(uint8_t * manuf_data, char *manuf_data_str){
-	len = 2; //skip manufacturer id
+	uint8_t len = 2; //skip manufacturer id
 	while( manuf_data[len] != 0){
 		len++;
 	}
