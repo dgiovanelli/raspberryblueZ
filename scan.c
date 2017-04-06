@@ -215,11 +215,11 @@ int main()
 
 	
 	time_t rawtime;
-	struct tm *info;
+	struct tm *time_info;
 	char filename[80];
 	time( &rawtime );
-	info = localtime( &rawtime );
-	strftime(filename,80,"log_%j_%H.%M.%S", info);
+	time_info = localtime( &rawtime );
+	strftime(filename,80,"log_%j_%H.%M.%S", time_info);
 	
 	
 	FILE * fp;
@@ -253,14 +253,14 @@ int main()
 					manuf_data_to_str(manuf_data,manuf_data_str);*/
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
 						time( &rawtime );
-						info = localtime( &rawtime );
+						time_info = localtime( &rawtime );
 						
 						uint32_t timestamp = (unsigned)time(NULL);
 						uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
 						
 						char[80] human_timestamp;
 						memset(human_timestamp, 0, sizeof(human_timestamp));
-						strftime(human_timestamp,80,"%Y %m %d %H %M %S", info);
+						strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 						
 						printf("%d %s %s ADV %d %s\n", timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]);
 						fprintf(fp, "%s %d %s %s ADV %d %s\n", human_timestamp, timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]));
