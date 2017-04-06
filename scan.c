@@ -3,6 +3,8 @@
 //  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
+#include <time.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
@@ -211,6 +213,18 @@ int main()
 
 	printf("Scanning....\n");
 
+	
+	time_t rawtime;
+	struct tm *info;
+	char filename[80];
+	time( &rawtime );
+	info = localtime( &rawtime );
+	strftime(filename,80,"log_%j_%H.%M.%S", info);
+	
+	
+	FILE * fp;
+	fp = fopen( filename, "w+" );
+	
 	uint8_t buf[HCI_MAX_EVENT_SIZE];
 	evt_le_meta_event * meta_event;
 	le_advertising_info * info;
@@ -238,7 +252,18 @@ int main()
 					/*char manuf_data_str[60];
 					manuf_data_to_str(manuf_data,manuf_data_str);*/
 					if(strcmp(name, "CLIMBM") == 0 || strcmp(name, "CLIMBC") == 0){
-						printf("%s - %s - RSSI %d - %s\n", addr, name,(signed char)info->data[info->length],&manuf_data_str[0]);
+						time( &rawtime );
+						info = localtime( &rawtime );
+						
+						uint32_t timestamp = (unsigned)time(NULL);
+						uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
+						
+						char[80] human_timestamp;
+						memset(human_timestamp, 0, sizeof(human_timestamp));
+						strftime(human_timestamp,80,"%Y %m %d %H %M %S", info);
+						
+						printf("%d %s %s ADV %d %s\n", timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]);
+						fprintf(fp, "%s %d %s %s ADV %d %s\n", human_timestamp, timestamp_ms, addr, name,(signed char)info->data[info->length],&manuf_data_str[4]));
 					}
 					offset = info->data + info->length + 2;
 				}
@@ -246,6 +271,8 @@ int main()
 		}
 	}
 
+	fclose(fp);
+	
 	// Disable scanning.
 
 	memset(&scan_cp, 0, sizeof(scan_cp));
