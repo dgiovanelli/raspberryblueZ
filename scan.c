@@ -258,7 +258,7 @@ int main()
 						uint32_t timestamp = (unsigned)time(NULL);
 						uint64_t timestamp_ms = timestamp*1000; //TODO: find a way to calculate the correct millis
 						
-						char[80] human_timestamp;
+						char human_timestamp[80];
 						memset(human_timestamp, 0, sizeof(human_timestamp));
 						strftime(human_timestamp,80,"%Y %m %d %H %M %S", time_info);
 						
